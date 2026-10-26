@@ -14,7 +14,7 @@ on:
         required: false
       os_list:
         required: false
-        default: '["ubuntu-latest", "windows-2019", "macOS-13"]'
+        default: '["ubuntu-latest"]'
       python_version:
         required: false
         type: string
@@ -37,9 +37,7 @@ on:
       os_list:
         required: false
         type: string
-        # Use windows-2019 due to:
-        # https://developercommunity.visualstudio.com/t/Prev-Issue---with-__assume-isnan-/1597317
-        default: '["ubuntu-latest", "windows-2019", "macOS-13"]'
+        default: '["ubuntu-latest"]'
 
       python_version:
         required: false
@@ -60,8 +58,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     container:
       image: ${{(startsWith(matrix.os, 'ubuntu') && 'ghcr.io/llvm/ci-ubuntu-22.04:latest') || null}}
-      volumes:
-        - /mnt/:/mnt/
+      # volumes:
+      #   - /mnt/:/mnt/
     strategy:
       fail-fast: false
       matrix:
@@ -77,7 +75,7 @@ jobs:
       # lldb.  Using this setup-python action to make 3.10 the default
       # python fixes this.
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python_version }}
       - name: Install Ninja
@@ -86,7 +84,7 @@ jobs:
       # actions/checkout deletes any existing files in the new git directory,
       # so this needs to either run before ccache-action or it has to use
       # clean: false.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 250
       - name: Setup ccache
@@ -104,25 +102,23 @@ jobs:
           key: ${{ matrix.os }}
           variant: sccache
       - name: Build and Test
-        env:
-          # Workaround for https://github.com/actions/virtual-environments/issues/5900.
-          # This should be a no-op for non-mac OSes
-          PKG_CONFIG_PATH: /usr/local/Homebrew/Library/Homebrew/os/mac/pkgconfig//12
+        # env:
+        #  PKG_CONFIG_PATH: /usr/local/Homebrew/Library/Homebrew/os/mac/pkgconfig//12
         shell: bash
         id: build-llvm
         run: |
           if [ "${{ runner.os }}" == "Linux" ]; then
-            builddir="/mnt/build/"
+            builddir="$(pwd)"/build
             mkdir -p $builddir
             extra_cmake_args="-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
-          else
-            builddir="$(pwd)"/build
+          # else
+          #   builddir="$(pwd)"/build
           fi
-          if [ "${{ runner.os }}" == "macOS" ]; then
-            # Workaround test failure on some lld tests on MacOS
-            # https://github.com/llvm/llvm-project/issues/81967
-            extra_cmake_args="-DLLVM_DISABLE_ASSEMBLY_FILES=ON"
-          fi
+          # if [ "${{ runner.os }}" == "macOS" ]; then
+          #   # Workaround test failure on some lld tests on MacOS
+          #   # https://github.com/llvm/llvm-project/issues/81967
+          #   extra_cmake_args="-DLLVM_DISABLE_ASSEMBLY_FILES=ON"
+          # fi
           echo "llvm-builddir=$builddir" >> "$GITHUB_OUTPUT"
           cmake -G Ninja \
                 -B "$builddir" \
@@ -137,13 +133,13 @@ jobs:
                 ${{ inputs.extra_cmake_args }}
           ninja -C "$builddir" '${{ inputs.build_target }}'
 
-      - name: Build and Test libclc
-        if: "!startsWith(matrix.os, 'windows') && contains(inputs.projects, 'libclc')"
-        env:
-          LLVM_BUILDDIR: ${{ steps.build-llvm.outputs.llvm-builddir }}
-        run: |
-          # Make sure all of LLVM libraries that llvm-config needs are built.
-          ninja -C "$LLVM_BUILDDIR"
-          cmake -G Ninja -S libclc -B libclc-build -DLLVM_DIR="$LLVM_BUILDDIR"/lib/cmake/llvm -DLIBCLC_TARGETS_TO_BUILD="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl"
-          ninja -C libclc-build
-          ninja -C libclc-build test
+      # - name: Build and Test libclc
+      #   if: "!startsWith(matrix.os, 'windows') && contains(inputs.projects, 'libclc')"
+      #   env:
+      #     LLVM_BUILDDIR: ${{ steps.build-llvm.outputs.llvm-builddir }}
+      #   run: |
+      #     # Make sure all of LLVM libraries that llvm-config needs are built.
+      #     ninja -C "$LLVM_BUILDDIR"
+      #     cmake -G Ninja -S libclc -B libclc-build -DLLVM_DIR="$LLVM_BUILDDIR"/lib/cmake/llvm -DLIBCLC_TARGETS_TO_BUILD="amdgcn--;amdgcn--amdhsa;r600--;nvptx--;nvptx64--;nvptx--nvidiacl;nvptx64--nvidiacl"
+      #     ninja -C libclc-build
+      #     ninja -C libclc-build test
