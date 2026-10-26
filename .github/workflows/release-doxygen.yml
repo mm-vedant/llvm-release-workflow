@@ -38,22 +38,22 @@ jobs:
       - name: Checkout LLVM
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Setup Python env
-        uses: actions/setup-python@v4
-        with:
-          cache: 'pip'
-          cache-dependency-path: './llvm/docs/requirements.txt'
+      # - name: Setup Python env
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     cache: 'pip'
+      #     cache-dependency-path: './llvm/docs/requirements.txt'
 
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-              doxygen \
-              graphviz \
-              python3-github \
-              ninja-build \
-              texlive-font-utils
-          pip3 install --user -r ./llvm/docs/requirements.txt
+      # - name: Install Dependencies
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y \
+      #         doxygen \
+      #         graphviz \
+      #         python3-github \
+      #         ninja-build \
+      #         texlive-font-utils
+      #     pip3 install --user -r ./llvm/docs/requirements.txt
 
       - name: Build Doxygen
         env:
