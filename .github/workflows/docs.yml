@@ -9,24 +9,25 @@ permissions:
   contents: read
 
 on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'llvm/docs/**'
-      - 'clang/docs/**'
-      - 'clang/include/clang/Basic/AttrDocs.td'
-      - 'clang/include/clang/Driver/ClangOptionDocs.td'
-      - 'clang/include/clang/Basic/DiagnosticDocs.td'
-      - 'clang-tools-extra/docs/**'
-  pull_request:
-    paths:
-      - 'llvm/docs/**'
-      - 'clang/docs/**'
-      - 'clang/include/clang/Basic/AttrDocs.td'
-      - 'clang/include/clang/Driver/ClangOptionDocs.td'
-      - 'clang/include/clang/Basic/DiagnosticDocs.td'
-      - 'clang-tools-extra/docs/**'
+  # push:
+  #   branches:
+  #     - 'main'
+  #   paths:
+  #     - 'llvm/docs/**'
+  #     - 'clang/docs/**'
+  #     - 'clang/include/clang/Basic/AttrDocs.td'
+  #     - 'clang/include/clang/Driver/ClangOptionDocs.td'
+  #     - 'clang/include/clang/Basic/DiagnosticDocs.td'
+  #     - 'clang-tools-extra/docs/**'
+  # pull_request:
+  #   paths:
+  #     - 'llvm/docs/**'
+  #     - 'clang/docs/**'
+  #     - 'clang/include/clang/Basic/AttrDocs.td'
+  #     - 'clang/include/clang/Driver/ClangOptionDocs.td'
+  #     - 'clang/include/clang/Basic/DiagnosticDocs.td'
+  #     - 'clang-tools-extra/docs/**'
+  workflow_dispatch:
 
 jobs:
   check-docs-build:
