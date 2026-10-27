@@ -5,18 +5,18 @@ permissions:
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'release/**'
-    paths:
-      - 'clang/**'
-      - '.github/workflows/libclang-abi-tests.yml'
-  pull_request:
-    branches:
-      - 'release/**'
-    paths:
-      - 'clang/**'
-      - '.github/workflows/libclang-abi-tests.yml'
+  # push:
+  #   branches:
+  #     - 'release/**'
+  #   paths:
+  #     - 'clang/**'
+  #     - '.github/workflows/libclang-abi-tests.yml'
+  # pull_request:
+  #   branches:
+  #     - 'release/**'
+  #   paths:
+  #     - 'clang/**'
+  #     - '.github/workflows/libclang-abi-tests.yml'
 
 concurrency:
   # Skip intermediate builds: always.

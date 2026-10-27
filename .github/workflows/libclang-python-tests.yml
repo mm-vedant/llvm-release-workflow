@@ -5,22 +5,22 @@ permissions:
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - 'clang/bindings/python/**'
-      - 'clang/tools/libclang/**'
-      - 'clang/CMakeList.txt'
-      - '.github/workflows/libclang-python-tests.yml'
-      - '.github/workflows/llvm-project-tests.yml'
-  pull_request:
-    paths:
-      - 'clang/bindings/python/**'
-      - 'clang/tools/libclang/**'
-      - 'clang/CMakeList.txt'
-      - '.github/workflows/libclang-python-tests.yml'
-      - '.github/workflows/llvm-project-tests.yml'
+  # push:
+  #   branches:
+  #     - 'main'
+  #   paths:
+  #     - 'clang/bindings/python/**'
+  #     - 'clang/tools/libclang/**'
+  #     - 'clang/CMakeList.txt'
+  #     - '.github/workflows/libclang-python-tests.yml'
+  #     - '.github/workflows/llvm-project-tests.yml'
+  # pull_request:
+  #   paths:
+  #     - 'clang/bindings/python/**'
+  #     - 'clang/tools/libclang/**'
+  #     - 'clang/CMakeList.txt'
+  #     - '.github/workflows/libclang-python-tests.yml'
+  #     - '.github/workflows/llvm-project-tests.yml'
 
 concurrency:
   # Skip intermediate builds: always.

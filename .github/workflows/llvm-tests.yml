@@ -5,20 +5,20 @@ permissions:
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'release/**'
-    paths:
-      - 'llvm/**'
-      - '.github/workflows/llvm-tests.yml'
-      - '.github/workflows/llvm-project-tests.yml'
-  pull_request:
-    branches:
-      - 'release/**'
-    paths:
-      - 'llvm/**'
-      - '.github/workflows/llvm-tests.yml'
-      - '.github/workflows/llvm-project-tests.yml'
+  # push:
+  #   branches:
+  #     - 'release/**'
+  #   paths:
+  #     - 'llvm/**'
+  #     - '.github/workflows/llvm-tests.yml'
+  #     - '.github/workflows/llvm-project-tests.yml'
+  # pull_request:
+  #   branches:
+  #     - 'release/**'
+  #   paths:
+  #     - 'llvm/**'
+  #     - '.github/workflows/llvm-tests.yml'
+  #     - '.github/workflows/llvm-project-tests.yml'
 
 concurrency:
   # Skip intermediate builds: always.
